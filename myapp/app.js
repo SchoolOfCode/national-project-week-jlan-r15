@@ -3,11 +3,12 @@ const app = express();
 const PORT = 3000;
 
 import {
-  getLinks,
+  //   getLinks,
   updateLinkByID,
   getLinkByID,
   createLink,
   deleteLinkByID,
+  getLinksByQuery,
 } from "./models/functions.js";
 
 app.use(express.static("public"));
@@ -18,41 +19,63 @@ app.get("/", function (req, res) {
   res.sendFile(html);
 });
 
-app.get("/link/:id", async function (req, res) {
+app.get("/links", async function (req, res) {
+  console.log(req.query, req.params);
+  const { name, topic, title } = req.query;
+  if (topic) {
+    const data = await getLinksByQuery(topic);
+    return res.json({ success: true, payload: data });
+  }
+  if (name) {
+    const linkName = await getLinkByID(name);
+    return res.json({ success: true, payload: linkName });
+  }
+  if (title) {
+    const data = await getLinksByQuery(null, title);
+    return res.json({ success: true, payload: data });
+  } else {
+    return res.json({
+      success: false,
+      payload: null,
+    });
+  }
+});
+
+app.get("/links/:id", async function (req, res) {
   console.log(req.params.id);
   var linkByID = await getLinkByID(req.params.id);
   if (linkByID) {
-    res.json({
+    return res.json({
       success: true,
       payload: linkByID,
     });
   } else {
-    res.json({
+    return res.json({
       success: false,
     });
   }
 });
 
-app.get("/links", async function (req, res) {
-  const allLinks = await getLinks();
-  res.json({
-    success: true,
-    payload: allLinks,
-  });
-});
+// app.get("/links", async function (req, res) {
+//   const allLinks = await getLinks();
+//   res.json({
+//     success: true,
+//     payload: allLinks,
+//   });
+// });
 
 app.post("/links", async function (req, res) {
   let newLinks = req.body;
   newLinks = await createLink();
-  res.json({
+  return res.json({
     success: true,
     payload: newLinks,
   });
 });
 
-app.put("/link/:id", async function (req, res) {
+app.put("/links/:id", async function (req, res) {
   let updatedLink = await updateLinkByID(req.params.id, req.body);
-  res.json({
+  return res.json({
     success: true,
     payload: updatedLink,
   });
@@ -60,7 +83,7 @@ app.put("/link/:id", async function (req, res) {
 
 app.delete("/links/:id", async function (req, res) {
   const deletedLink = await deleteLinkByID(req.params.id);
-  res.json({
+  return res.json({
     success: true,
     payload: deletedLink,
   });

@@ -10,7 +10,8 @@
   "author": "Austyn J Tempesta",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.2"
+    "express": "^4.17.2",
+    "nodemon": "^2.0.15"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.8",

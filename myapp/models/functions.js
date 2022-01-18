@@ -10,6 +10,19 @@ export async function getLinks() {
   return links;
 }
 
+export async function getLinksByQuery(query, title) {
+  console.log("functionQuery", query);
+  const foundLink = links.find(function (link) {
+    if (query) {
+      return link.topic.toLowerCase() === query.toLowerCase();
+    }
+    if (title) {
+      return link.title.toLowerCase() === title.toLowerCase();
+    }
+  });
+  return foundLink;
+}
+
 // GET A Link BY ID
 export async function getLinkByID(id) {
   console.log("id:" + id);
@@ -17,7 +30,7 @@ export async function getLinkByID(id) {
     console.log(link);
     return link.id == id;
   });
-  console.log("movie found: ");
+  console.log("Link found: ");
   console.log(linkById);
   if (linkById) {
     return linkById;
