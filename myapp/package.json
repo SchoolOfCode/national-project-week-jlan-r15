@@ -4,12 +4,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "-r dotenv/config bin/www.js"
+
   },
   "keywords": [],
   "author": "Austyn J Tempesta",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "nodemon": "^2.0.15"
   },
