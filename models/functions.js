@@ -1,4 +1,5 @@
 import links from "../data/data.js";
+import query from "../db/index.js";
 
 // getLinkByID should return the particular links we are looking for
 // createLink should add a link to the collection and return the new link
@@ -21,26 +22,39 @@ export async function getLinksByQuery(query, title) {
     }
   });
   return foundLink;
+  //to connect this to database - need to call the query function like done in createLink (line 43)
 }
 
 // GET A Link BY ID
+//to get a resource from the database Heroku where id is passed into the function.
+
 export async function getLinkByID(id) {
   console.log("id:" + id);
-  var linkById = links.find((link) => {
-    console.log(link);
-    return link.id == id;
-  });
-  console.log("Link found: ");
-  console.log(linkById);
-  if (linkById) {
-    return linkById;
-  }
+
+  const sqlString = `SELECT * FROM resources WHERE id=$1`;
+  const res = await query(sqlString, [id]);
+  console.log(res);
+  //return res.row or data? - see what it returns in terminal results when this is run - may not need this?!
+
+  // var linkById = links.find((link) => {
+  //   console.log(link);
+  //   return link.id == id;
+  // });
+  // console.log("Link found: ");
+  // console.log(linkById);
+  // if (linkById) {
+  //   return linkById;
+  //}
 }
 
 // CREATE A Link
 export async function createLink(link) {
-  links.push(link);
-  return links[links.length - 1];
+  //   links.push(link);
+  //   return links[links.length - 1];
+  const sqlString = `INSERT INTO resources (title, topic, url) VALUES ($1, $2, $3)
+RETURNING title, topic, url`;
+  const res = await query(sqlString, [link.title, link.topic, link.url]);
+  console.log(res);
 }
 
 // UPDATE A Link BY ID
