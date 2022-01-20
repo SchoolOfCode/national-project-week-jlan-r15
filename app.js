@@ -69,10 +69,12 @@ app.get("/links/:id", async function (req, res) {
 
 app.post("/links", async function (req, res) {
   let newLinks = req.body;
-  newLinks = await createLink();
+  //newLinks = await createLink();
+  const result = await createLink(newLinks);
   return res.json({
     success: true,
-    payload: newLinks,
+    //payload: newLinks,
+    payload: result,
   });
 });
 
