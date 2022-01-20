@@ -12,7 +12,7 @@ import {
   getLinkByID,
   createLink,
   deleteLinkByID,
-  getLinksByQuery,
+  //getLinksByQuery,
 } from "./models/functions.js";
 
 app.use(express.static("public"));
